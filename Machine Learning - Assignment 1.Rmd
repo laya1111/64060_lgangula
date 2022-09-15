@@ -1,0 +1,46 @@
+---
+title: "Machine Learning - Assignment 1"
+author: "Layasree Gangula"
+date: '2022-09-15'
+output: pdf_document
+---
+
+```{r}
+Laya_dataset <- read.csv("C:/Users/gauth/OneDrive/Desktop/Kent State University/volcanic-eruptions.csv")
+#Following is the dataset that has been imported. The dataset represents Volcanic eruptions by countries and years.
+View(Laya_dataset)
+#The data has been taken from #https://public.opendatasoft.com/explore/dataset/significant-volcanic-eruption-database/#table/
+```
+
+
+```{R}
+mean(Laya_dataset$Latitude)
+sd(Laya_dataset$Latitude)
+# The above values represent descriptive statistics for a selection of quantitative  variables. The above values show the mean and the standard deviation for the quantitative variable Latitude.
+
+```
+
+```{r}
+table(Laya_dataset$Location)
+str(Laya_dataset$Country)
+# The above values represent categorical descriptive analysis of the variables. 
+```
+
+```{r}
+Layadataset_Trasnformed = (Laya_dataset$Latitude - mean(Laya_dataset$Latitude)/sd(Laya_dataset$Latitude))
+Layadataset_Trasnformed
+#Transformation of variables has been done above.
+```
+
+```{r}
+hist(Laya_dataset$Elevation)
+#The above graphical representation is a histogram.  The selected variable is the Elevation.
+```
+
+```{r}
+x <- Laya_dataset$Year
+y <- Laya_dataset$Elevation
+plot(x,y, main = "Year and Elevation", xlab = "Year",ylab = "Elevation")
+#The above graphical representation is a scatterplot. 
+#The selected variables are Year and Elevation
+```
