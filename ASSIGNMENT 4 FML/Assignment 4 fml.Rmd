@@ -1,0 +1,99 @@
+---
+title: "Assignment 4 fml"
+author: "Laya sree gangula"
+date: '2022-11-02'
+output: pdf_document
+---
+
+```{r setup}
+library(factoextra)
+library(ggplot2)
+library(tidyverse)
+library(ISLR)
+
+pharm <- read.csv("C://Users//heere//OneDrive//Documents//DESKTOP FILES//FML ASSIGNMENT 4//pharmacy.csv")
+View(pharm)
+#TASK1
+#Use only the numerical variables (1 to 9) to cluster the 21 firms. 
+#Justify the various choices made in conducting the cluster analysis, 
+#such as weights for different variables, the specific clustering algorithm(s) 
+#used, the number of clusters formed, and so on. 
+x <- na.omit(pharm)
+summary(x)
+
+row.names(x) <- x[,1]
+Pharm1 <- x[,3:11]
+head(Pharm1)
+Pharm2 <- scale(Pharm1)
+head(Pharm2)
+
+fviz_nbclust(Pharm2, kmeans, method = "wss") + labs(subtitle = "Elbow Method")
+fviz_nbclust(Pharm2, kmeans, method = "silhouette") + labs(subtitle = "Silhouette Method")
+
+set.seed(64060)
+
+k5 <- kmeans(Pharm2, centers = 5, nstart = 25)
+k5$centers
+fviz_cluster(k5, data = Pharm2)
+
+distance <- dist(Pharm2, method = "euclidean")
+fviz_dist(distance)
+
+fit <- kmeans(Pharm2, 5)
+aggregate(Pharm2, by=list(fit$cluster), FUN=mean)
+pharm3 <- data.frame(Pharm2, fit$cluster)
+pharm3
+library(cluster)
+clusplot(Pharm2, fit$cluster, color = TRUE, shade = TRUE,
+         labels = 2, lines = 0)
+
+
+
+
+#Task2
+#B) Interpret the clusters with respect to numerical variables used in formatting the clusters.
+
+#cluster 1 - JNJ,MRK,PFE,GSK-- They have the largest market capitalization, and the corporations are effectively managing their activities by financing them (leverage below 0.47)
+#cluster 2 - AHM,WPI,AVE--They have the lowest asset turnover and the lowest beta, which means that the company's equities are outperforming the current market index.
+#cluster 3 - CHTT,MRX,LVX,ELN--They have the smallest market capitalization, do not rely on debt to support operations, and have the fastest revenue growth. Because their beta value is greater than one, these company stocks also provide strong returns.
+#cluster 4 - AGN,BAY,RHA--- These have the largest cost-to-income ratio, making them less profitable.
+#Their Return on Equity is also less than one, indicating that investing in these stocks will not be as profitable as it may be.
+#cluster 5 - ABT,SGP,NVS,AZN,BMY,WYE--Their asset turnover is the largest, their revenue growth is the slowest, and their net profit margin is the highest. These businesses are profitable because they are expanding.
+
+
+
+
+
+
+
+
+#Task3
+#: Is there a pattern in the clusters with respect to the numerical variables (10 to 12)? (those not
+#used in forming the clusters)
+#Each cluster was manually filtered to detect patterns in media suggestions, location, and exchange.
+#cluster1--The stocks are moderate in character, which means they are neither weak nor have had strong recent returns.
+#cluster2--In terms of geographical distribution, the stocks are well-balanced. Their principles are sound technically, and media endorsements are overwhelmingly favourable.
+#cluster3--Because of their financial soundness, they are moderately recommended despite their high leverage ratio.
+#cluster4--These are the stocks that, according to the media, should be held because they will eventually turn into good stocks.
+#cluster5--The cluster contains companies with a high net profit margin that are advised to be kept for a longer period of time.
+
+
+
+#Task 4: Provide an appropriate name for each cluster using any or all of the variables in the dataset.
+#Cluster1-- Profitable clusture(Because these are stocks with a long track record,)
+#cluster2-- Gold mine clusture(Market recommendations are very bullish, despite their modest beta.)
+#cluster3-- primary clusture(Stocks with strong financial and other fundamentals)
+#clusture4-- Bear clusture(These are the stocks with reasonable returns.)
+#clusture5--  continuing clusture(- A high net profit margin indicates that the company is doing well, hence the stocks are highly recommended for inclusion in the portfolio.)
+
+
+
+
+
+
+
+
+
+
+
+```
