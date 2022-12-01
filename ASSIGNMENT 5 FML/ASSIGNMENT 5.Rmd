@@ -1,0 +1,137 @@
+---
+title: "Assignment 5"
+author: "Laya sree gangula"
+date: "2022-12-01"
+output: pdf_document
+---
+
+------------------------------------------------------------------------
+
+```{r}
+#loading all the required libraries
+
+library(factoextra)
+library(dendextend)
+library(cluster)
+library(tidyverse)
+
+```
+
+```{r}
+#importing the data
+cer= read_csv("C://Users//heere//Downloads//Cereals.csv")
+view(cer)
+numericaldata = data.frame(cer[,4:16])
+spec(cer)
+
+
+```
+
+```{r}
+#data prepocessing - removing all cereals with missing values
+omitmissing = na.omit(numericaldata)
+
+
+```
+
+```{r}
+#normalizing and scaling the data
+normalise = scale(omitmissing)
+
+```
+
+```{r}
+#measuring the distance using the euclidian distance and computing the dissimilarity matrix
+distance = dist(normalise, method = "euclidian")
+
+```
+
+```{r}
+#performing hierarchial clustering using complete linkage and representing in plot
+hierarchial_clustering = hclust(distance,method = "complete")
+plot(hierarchial_clustering)
+
+```
+
+```{r}
+#rounding off the decimals
+round(hierarchial_clustering$height, 4)
+
+```
+
+```{r}
+#determining the optimla clusters and highlighting with colours
+plot(hierarchial_clustering)
+rect.hclust(hierarchial_clustering,k = 4, border = "red")
+
+```
+
+```{r}
+#performing clustering using AGNES
+HCsingle = agnes(normalise, method = "single")
+HCcomplete = agnes(normalise, method = "complete")
+HCaverage = agnes(normalise, method = "average")
+HCward = agnes(normalise, method = "ward")
+
+```
+
+```{r}
+#performing clustering using AGNES
+HCsingle = agnes(normalise, method = "single")
+HCcomplete = agnes(normalise, method = "complete")
+HCaverage = agnes(normalise, method = "average")
+HCward = agnes(normalise, method = "ward")
+
+```
+
+```{r}
+#using the ward method for hierarchial clustering
+HC1 <- hclust(distance, method = "ward.D2" )
+subgrp <- cutree(HC1, k = 4)
+table(subgrp)
+cereals <- as.data.frame(cbind(normalise,subgrp))
+
+```
+
+```{r}
+#visualising the results on scatterplot
+fviz_cluster(list(data = normalise, cluster = subgrp))
+
+```
+
+```{r}
+#choosing the healthy cereal cluster
+newdata <- cereals
+newdata_omit <- na.omit(newdata)
+Clust <- cbind(newdata_omit, subgrp)
+Clust[Clust$subgrp==1,]
+
+```
+
+```{r}
+Clust[Clust$subgrp==2,]
+
+
+```
+
+```{r}
+Clust[Clust$subgrp==3,]
+
+```
+
+```{r}
+Clust[Clust$subgrp==4,]
+
+```
+
+```{r}
+#here we calculate the mean rating in order determine the healthy cluster cereals
+mean(Clust[Clust$subgrp==1,"rating"])
+mean(Clust[Clust$subgrp==2,"rating"])
+mean(Clust[Clust$subgrp==3,"rating"])
+mean(Clust[Clust$subgrp==4,"rating"])
+#From the above results it is clearly evident that mean rating is highest for subgroup 1.so, it is recommended to choose subgrp 1 as the healthy diet cluster.
+
+#yes, we need to noemalize the data.
+
+```
